@@ -19,7 +19,7 @@ const Single = () => {
   useEffect(() => {
     const loadDictionary = async () => {
       try {
-        const response = await fetch(`/crosswordsolver-reactjs/assets/dictionaries/${selectedDictionary}.txt`);
+        const response =await fetch(`/crosswordsolver-reactjs/assets/dictionaries/${selectedDictionary}.txt`);
         console.log(response);
         const text = await response.text();
         console.log(text);
