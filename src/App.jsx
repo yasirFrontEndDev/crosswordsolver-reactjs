@@ -3,6 +3,7 @@ import {
   createBrowserRouter,
   RouterProvider,
   createRoutesFromElements,
+  createHashRouter,
   Route
 } from "react-router-dom";
 import MainLayout from './layouts/MainLayout';
@@ -14,7 +15,7 @@ import Privacy from './pages/Privacy';
 const App = () => {
 
 
-  const router = createBrowserRouter(
+  const router = createHashRouter(
     createRoutesFromElements(
       <>
        <Route path='/' element={<MainLayout />} >
