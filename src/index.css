@@ -1,0 +1,429 @@
+
+html, body {
+    margin: 0;
+    height: 100%;
+  }
+  
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333333;
+    padding: 0 15px;
+  }
+    .header-h2 {
+    display: inline-block; 
+    vertical-align: super; 
+    /* margin: 0;  */
+    text-decoration: none; 
+    color: black;
+  }
+  /* privacy css */
+
+ .mainBody {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+} 
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.headerPrivacy {
+    background: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.headerPrivacy h1 {
+    margin: 0;
+}
+
+.content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.content p {
+    margin: 0 0 20px;
+}
+
+.content a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.content a:hover {
+    text-decoration: underline;
+}
+
+.privacyUl {
+    list-style: none;
+    padding: 0;
+}
+
+.privacyUl li {
+    margin: 10px 0;
+}
+
+.footerPrivacy {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    margin-top: 20px;
+}
+
+.footerPrivacy p {
+    margin: 0;
+}
+
+.btn-go-home {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: #000;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.btn-go-home:hover {
+    background: #005bb5;
+}
+
+  .headerMain {
+    text-align: center; /* Center-align the logo and title */
+  }
+
+
+  .wrapperMain {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+  
+  main {
+    flex: 1;
+  }
+  
+  .mini {
+    font-size: 10px;
+  }
+  
+  .smaller {
+    font-size: 14px;
+  }
+  
+  form {
+    margin: 10px 0 0 0;
+  }
+  
+  .textbox {
+    display: block;
+    border: 1px solid #333;
+    background-color: #fff;
+    border-radius: 3px;
+    width: 20px;
+    float: left;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 0 4px 4px 0;
+    padding: 4px 7px;
+  }
+  
+  input.button {
+    border: 1px solid #333;
+    width: 82px;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 5px 5px 15px;
+    background-color: #ccc;
+    padding: 4px 7px;
+  }
+  
+  .textbox:hover {
+    outline: none;
+    background-color: #eee;
+  }
+  
+  .textbox:focus {
+    outline: none;
+    border-color: #4484be;
+  }
+  
+  .button:hover {
+    outline: none;
+    border-color: #000;
+    background-color: #ddd;
+  }
+  
+  hr {
+    margin: 15px 0;
+    border-color: #888;
+    border-style: solid;
+    border-width: 1px 0 0;
+  }
+  
+  .footerMain {
+    bottom: 0;
+    padding-bottom: 6px;
+    padding-top: 6px;
+    text-align: center;
+  }
+  
+  .footerMain a {
+    text-decoration: none;
+    color: #333;
+    margin: 0 10px;
+  }
+  
+  .footerMain a:hover {
+    text-decoration: underline;
+  }
+  .headerMain-h2 {
+    display: inline-block; 
+    vertical-align: super; 
+    /* margin: 0;  */
+    text-decoration: none; 
+    color: black;
+  }
+  
+  .headerMain a {
+    text-decoration: none;
+  }
+  
+  .wrapperMain {
+    width: 790px; /* Width to fit all 15 input boxes in one line */
+    margin: 0 auto; /* Center the content horizontally */
+    padding: 20px;
+    text-align: center; /* Center text inside the wrapper */
+    box-sizing: border-box; /* Include padding and border in the width */
+    /* flex: 1;  */
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+  
+  main {
+    flex: 1;
+    text-align: left; /* Align text left inside the main content */
+  }
+  
+  .textbox {
+    display: inline-block; 
+    border: 1px solid #333;
+    background-color: #fff;
+    border-radius: 3px;
+    width: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 0 4px; 
+    padding: 4px 7px;
+  }
+  
+  input.button {
+    border: 1px solid #333;
+    width: 82px;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 5px;
+    background-color: #ccc;
+    padding: 4px 7px;
+  }
+  
+  
+  form {
+    margin: 10px 0 0 0;
+  }
+  
+  
+  .textbox:hover {
+    outline: none;
+    background-color: #eee;
+  }
+  
+  .textbox:focus {
+    outline: none;
+    border-color: #4484be;
+  }
+  
+  .gamelinks {
+    text-align: center;
+  }
+  
+  hr {
+    margin: 15px 0;
+    border-color: #888;
+    border-style: solid;
+    border-width: 1px 0 0;
+    margin-left: auto;
+    margin-right: auto; /* Center align the horizontal line */
+  }
+  
+  .footerMain {
+    bottom: 0;
+    padding-bottom: 6px;
+    padding-top: 6px;
+  }
+  
+  .footerMain a {
+    text-decoration: none;
+    color: #333;
+    margin: 0 10px;
+  }
+  
+  .footerMain a:hover {
+    text-decoration: underline;
+  }
+  
+  
+  /* Mobile Styles */
+  @media (max-width: 768px) {
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+    
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      /* background-color: #efefef; */
+      color: #333333;
+      padding: 0 15px;
+    }
+    
+    .wrapperMain {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+    
+    main {
+      flex: 1;
+    }
+    
+    .mini {
+      font-size: 10px;
+    }
+    
+    .smaller {
+      font-size: 14px;
+    }
+    
+    form {
+      margin: 10px 0 0 0;
+    }
+    
+    .textbox {
+      display: block;
+      border: 1px solid #333;
+      background-color: #fff;
+      border-radius: 3px;
+      width: 20px;
+      float: left;
+      text-align: center;
+      text-transform: uppercase;
+      margin: 0 4px 4px 0;
+      padding: 4px 7px;
+    }
+    
+    input.button {
+      border: 1px solid #333;
+      width: 82px;
+      text-align: center;
+      cursor: pointer;
+      display: inline-block;
+      margin: 0 5px 5px 15px;
+      background-color: #ccc;
+      padding: 4px 7px;
+    }
+    
+    .textbox:hover {
+      outline: none;
+      background-color: #eee;
+    }
+    
+    .textbox:focus {
+      outline: none;
+      border-color: #4484be;
+    }
+    
+    .button:hover {
+      outline: none;
+      border-color: #000;
+      background-color: #ddd;
+    }
+    
+    hr {
+      margin: 15px 0;
+      border-color: #888;
+      border-style: solid;
+      border-width: 1px 0 0;
+    }
+    
+    .footerMain {
+      bottom: 0;
+      padding-bottom: 6px;
+      padding-top: 6px;
+      /* background-color: #efefef; */
+    }
+    
+    .footerMain a {
+      text-decoration: none;
+      color: #333;
+      margin: 0 10px;
+    }
+    
+    .footerMain a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Explicitly unset or override desktop styles */
+    .headerMain {
+      text-align: initial; /* Override desktop alignment */
+    }
+    
+    .headerMain img {
+      margin: initial; /* Override desktop margins */
+      /* float: left; */
+    }
+    
+    .headerMain h2 {
+      /* display: block;
+      vertical-align: baseline; 
+      margin: initial;  */
+      text-decoration: none; 
+      color: black;
+    }
+  
+    .headerMain a {
+      text-decoration: none;
+    }
+  
+    .wrapperMain {
+      width: auto; /* Override desktop width */
+      margin: 0; /* Override desktop margins */
+      padding: 0; /* Override desktop padding */
+      text-align: initial; /* Override desktop text alignment */
+      box-sizing: content-box; /* Override desktop box-sizing */
+      display: inline-block; /* Ensure block display */
+    }
+    
+    main {
+      text-align: left; 
+    }
+    
+    .gamelinks {
+      text-align: initial; 
+      padding-top: 10px;
+    }
+  }
+  
