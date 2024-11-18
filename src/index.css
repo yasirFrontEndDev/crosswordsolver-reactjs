@@ -259,7 +259,10 @@ html, body {
   .gamelinks {
     text-align: center;
   }
-  
+  .multiResults_Overflow {
+    max-height: 350px;
+    overflow-y: scroll;
+  }
   hr {
     margin: 15px 0;
     border-color: #888;
