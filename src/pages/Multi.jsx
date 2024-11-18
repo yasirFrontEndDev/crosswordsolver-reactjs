@@ -9,29 +9,15 @@ const Multi = () => {
   const inputRefsOne = useRef([]);
   const inputRefsTwo = useRef([]);
 
-  // Handle input change and shift focus to next input field
-  const handleInputChange = (e, index, set) => {
-    const currentSet = set === "one" ? inputRefsOne : inputRefsTwo;
-
-    if (e.key === "Backspace" && !e.target.value) {
-      if (index > 0) {
-        const previousInput = currentSet.current[index - 1];
-        previousInput.focus();
-      }
-    } else if (e.target.value.length === 1 && /^[a-zA-Z0-9.]$/.test(e.target.value)) {
-      if (index < currentSet.current.length - 1) {
-        currentSet.current[index + 1].focus();
-      }
-    }
-  };
-
-  // Load dictionary when the component mounts or dictionary changes
+  // Load dictionary from local files
   useEffect(() => {
     const loadDictionary = async () => {
       try {
-        // const response = await fetch(`assets/dictionaries/${selectedDictionary}.txt`);
-         //for gh-pages
-         const response =await fetch(`/crosswordsolver-reactjs/assets/dictionaries/${selectedDictionary}.txt`);
+         // const response = await fetch(`assets/dictionaries/${selectedDictionary}.txt`);
+        //for gh-pages
+        const response = await fetch(`/crosswordsolver-reactjs/assets/dictionaries/${selectedDictionary}.txt`);
+        console.log(response);
+        
         if (!response.ok) throw new Error("Failed to load dictionary");
         const text = await response.text();
         const words = text.split("\n").map((line) => line.trim().toLowerCase());
@@ -43,106 +29,171 @@ const Multi = () => {
     loadDictionary();
   }, [selectedDictionary]);
 
-  // Function to find matches for a pattern
-  const findMatches = (pattern, dictionary) => {
-    if (!pattern) return [];
-    const letterMapping = {};
-    let regexPattern = "";
-
-    for (const char of pattern) {
-      if (/\d/.test(char)) {
-        if (!letterMapping[char]) {
-          letterMapping[char] = `(?<group${char}>.)`;
-          regexPattern += letterMapping[char];
-        } else {
-          regexPattern += `\\k<group${char}>`;
-        }
-      } else if (char === "." || char === "?") {
-        regexPattern += ".";
-      } else {
-        regexPattern += char;
-      }
-    }
-
-    try {
-      const regex = new RegExp(`^${regexPattern}$`, "i");
-      return dictionary.filter((word) => regex.test(word));
-    } catch {
-      return [];
-    }
+  // Canonicalize input patterns (convert special chars to wildcards)
+  const canonicalizeInput = (inp) => {
+    return inp.trim().toLowerCase().replace(/[ *?]/g, ".");
   };
-  // Combine patterns logic
-  const combineDoublePatterns = (matches1, matches2, pattern1, pattern2) => {
-    let combinedMatches = [];
 
-    const mapPattern = (pattern, word) => {
-      let mapping = {};
-      for (let i = 0; i < pattern.length; i++) {
-        let char = pattern[i];
-        if (/\d/.test(char)) {
-          if (!mapping[char]) {
-            mapping[char] = word[i];
-          } else if (mapping[char] !== word[i]) {
-            return null;
-          }
-        } else if (char !== "." && char !== word[i]) {
-          return null;
-        }
-      }
-      return mapping;
-    };
+  // Single-pattern search logic
+  const singlePatternSearch = (words, inp) => {
+    const letterCorrectMatches = lettersCorrect(inp, words);
+    if (letterCorrectMatches.length === 0) {
+      return ["> No exact results found, printing closest matches:\n"];
+    }
+    const uniqueWildcardMatches = wildcardsUnique(inp, letterCorrectMatches);
+    if (uniqueWildcardMatches.length === 0) {
+      return [
+        "> No exact results found, printing closest matches:\n",
+        ...letterCorrectMatches,
+      ];
+    }
+    const matchedNumbers = numberPatterns(inp, uniqueWildcardMatches);
+    if (matchedNumbers.length === 0) {
+      return [
+        "> No exact results found, printing closest matches:\n",
+        ...uniqueWildcardMatches,
+      ];
+    }
+    return matchedNumbers;
+  };
 
-    matches1.forEach((word1) => {
+  // Double-pattern search logic
+  const doublePatternSearch = (words, pattern1, pattern2) => {
+    const results1 = singlePatternSearch(words, pattern1);
+    const results2 = singlePatternSearch(words, pattern2);
+
+    if (results1.includes(">") || results2.includes(">")) return [];
+    const output = [];
+
+    results1.forEach((word1) => {
       const map1 = mapPattern(pattern1, word1);
       if (!map1) return;
 
-      matches2.forEach((word2) => {
+      results2.forEach((word2) => {
         const map2 = mapPattern(pattern2, word2);
         if (!map2) return;
 
         let conflict = false;
-        for (const [key, value] of Object.entries(map1)) {
+        Object.entries(map1).forEach(([key, value]) => {
           if (map2[key] && map2[key] !== value) {
             conflict = true;
-            break;
           }
-        }
+        });
 
         if (!conflict) {
-          combinedMatches.push(`${word1}:${word2}`);
+          output.push(`${word1}:${word2}`);
         }
       });
     });
-
-    return combinedMatches;
+    return output;
   };
+
+  // Helper functions for patterns
+  const lettersCorrect = (inp, words) => {
+    const matched = [];
+    const inpCharsOnly = inp.replace(/[^a-zA-Z -]/g, " ");
+    words.filter((word) => word.length === inp.length).forEach((word) => {
+      let match = true;
+      for (let i = 0; i < inpCharsOnly.length; i++) {
+        if (inpCharsOnly[i] !== " " && inpCharsOnly[i] !== word[i]) {
+          match = false;
+          break;
+        }
+      }
+      if (match) matched.push(word);
+    });
+    return matched;
+  };
+
+  const wildcardsUnique = (inp, words) => {
+    const matched = [];
+    const wildcards = [...inp].map((ch, i) => (ch === "." ? i : -1)).filter((i) => i >= 0);
+    const letters = new Set([...inp].filter((ch) => ch !== "."));
+    words.forEach((word) => {
+      let match = true;
+      const usedLetters = new Set(letters);
+      wildcards.forEach((index) => {
+        if (usedLetters.has(word[index])) {
+          match = false;
+        } else {
+          usedLetters.add(word[index]);
+        }
+      });
+      if (match) matched.push(word);
+    });
+    return matched;
+  };
+
+  const numberPatterns = (inp, words) => {
+    const matched = [];
+    words.forEach((word) => {
+      const letterToNum = {};
+      const numToLetter = {};
+      let match = true;
+      [...inp].forEach((ch, i) => {
+        if (/\d/.test(ch)) {
+          const num = parseInt(ch);
+          if (
+            (numToLetter[num] && numToLetter[num] !== word[i]) ||
+            (letterToNum[word[i]] && letterToNum[word[i]] !== num)
+          ) {
+            match = false;
+          } else {
+            numToLetter[num] = word[i];
+            letterToNum[word[i]] = num;
+          }
+        } else if (letterToNum[word[i]] && letterToNum[word[i]] !== -1) {
+          match = false;
+        } else {
+          letterToNum[word[i]] = -1;
+        }
+      });
+      if (match) matched.push(word);
+    });
+    return matched;
+  };
+
+  const mapPattern = (pattern, word) => {
+    const mapping = {};
+    for (let i = 0; i < pattern.length; i++) {
+      if (/\d/.test(pattern[i])) {
+        if (mapping[pattern[i]] && mapping[pattern[i]] !== word[i]) {
+          return null;
+        }
+        mapping[pattern[i]] = word[i];
+      }
+    }
+    return mapping;
+  };
+
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const pattern1 = Array.from(e.target.elements)
-        .filter((el) => el.name.startsWith("l") && el.value)
+  
+    // Build pattern1 and pattern2 from form inputs
+    const pattern1 = canonicalizeInput(
+      [...e.target.elements]
+        .filter((el) => el.name.startsWith("l"))
         .map((el) => el.value)
-        .join("");
-    const pattern2 = Array.from(e.target.elements)
-        .filter((el) => el.name.startsWith("m") && el.value)
+        .join("")
+    );
+  
+    const pattern2 = canonicalizeInput(
+      [...e.target.elements]
+        .filter((el) => el.name.startsWith("m"))
         .map((el) => el.value)
-        .join("");
-
+        .join("")
+    );
+  
     setPattern1(pattern1);
     setPattern2(pattern2);
-
-    const matches1 = findMatches(pattern1, dictionary);
-    const matches2 = findMatches(pattern2, dictionary);
-
-
+  
+    // Only calculate combined results if both patterns are present
     if (pattern1 && pattern2) {
-        // Directly use the combined results function
-        setCombinedResults(combineDoublePatterns(matches1, matches2, pattern1, pattern2));
+      setCombinedResults(doublePatternSearch(dictionary, pattern1, pattern2));
     }
-    console.log(combinedResults , "comb");
-    
-};
+  };
+  
 
     // Handle dictionary change
     const handleDictionaryChange = (e) => {
