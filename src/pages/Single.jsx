@@ -11,15 +11,20 @@ const Single = () => {
 
   // Handle input change and shift focus to the next or previous input field
   const handleInputChange = (e, index) => {
-    if (e.key === "Backspace" && index > 0) {
-      const previousInput = inputRefs.current[index - 1];
-      previousInput.focus();
-      previousInput.value = ""; // Clear the previous input value
-    } else if (e.target.value.length === 1 && index < inputRefs.current.length - 1) {
+    const value = e.target.value;
+
+    // Move to the next input if a character is entered and it's not empty
+    if (value.length === 1 && index < inputRefs.current.length - 1) {
       inputRefs.current[index + 1].focus();
     }
   };
-
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace" && index > 0 && !e.target.value) {
+      const previousInput = inputRefs.current[index - 1];
+      previousInput.focus();
+      previousInput.value = ""; // Clear the previous input value
+    }
+  };
   // Load dictionary data
   useEffect(() => {
     const loadDictionary = async () => {
@@ -147,12 +152,8 @@ const Single = () => {
                   maxLength="1"
                   type="text"
                   ref={(el) => (inputRefs.current[index] = el)} // Assign ref
-                  onChange={(e) => {
-                    if (e.target.value.length === 1 && index < inputRefs.current.length - 1) {
-                      inputRefs.current[index + 1].focus(); // For regular navigation
-                    }
-                  }}
-                  onKeyDown={(e) => handleInputChange(e, index)} 
+                  onChange={(e) => handleInputChange(e, index)} // Handle input change
+                  onKeyDown={(e) => handleKeyDown(e, index)} // Handle key down
                 />
               ))}
               <input className="button" style={{ visibility: "hidden" }} />

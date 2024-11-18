@@ -31,15 +31,23 @@ const Multi = () => {
 
   const handleInputChange = (e, index, set) => {
     const currentSet = set === "one" ? inputRefsOne : inputRefsTwo;
+    const value = e.target.value;
+
+    // Move to the next input if a valid character is entered
+    if (value.length === 1 && /^[a-zA-Z0-9.]$/.test(value)) {
+      if (index < currentSet.current.length - 1) {
+        currentSet.current[index + 1].focus();
+      }
+    }
+  };
+  const handleKeyDown = (e, index, set) => {
+    const currentSet = set === "one" ? inputRefsOne : inputRefsTwo;
 
     if (e.key === "Backspace" && !e.target.value) {
       if (index > 0) {
         const previousInput = currentSet.current[index - 1];
         previousInput.focus();
-      }
-    } else if (e.target.value.length === 1 && /^[a-zA-Z0-9.]$/.test(e.target.value)) {
-      if (index < currentSet.current.length - 1) {
-        currentSet.current[index + 1].focus();
+        previousInput.value = ""; // Clear the previous input value
       }
     }
   };
@@ -247,13 +255,9 @@ const Multi = () => {
             className="textbox"
             maxLength="1"
             type="text"
-            ref={(el) => (inputRefsOne.current[i] = el)}
-            onKeyDown={(e) => handleInputChange(e, i, "one")}
-      onChange={(e) => {
-        if (e.target.value.length === 1 && i < inputRefsOne.current.length - 1) {
-          inputRefsOne.current[i + 1].focus();
-        }
-      }}
+            ref={(el) => (inputRefsOne.current[i] = el)} // Assign ref
+            onKeyDown={(e) => handleKeyDown(e, i, "one")} // Handle key down
+            onChange={(e) => handleInputChange(e, i, "one")} // Handle input change
             />
           ))}
           <input className="button" style={{ visibility: "hidden" }} />
@@ -271,12 +275,8 @@ const Multi = () => {
             maxLength="1"
             type="text"
             ref={(el) => (inputRefsTwo.current[i] = el)} // Assign ref
-            onKeyDown={(e) => handleInputChange(e, i, "two")}
-            onChange={(e) => {
-              if (e.target.value.length === 1 && i < inputRefsTwo.current.length - 1) {
-                inputRefsTwo.current[i + 1].focus();
-              }
-            }}
+            onKeyDown={(e) => handleKeyDown(e, i, "two")} // Handle key down
+            onChange={(e) => handleInputChange(e, i, "two")} // Handle input change
             />
           ))}
           <input type="submit" className="button" style={{ visibility: "hidden" }} />
