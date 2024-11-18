@@ -28,7 +28,20 @@ const Multi = () => {
     };
     loadDictionary();
   }, [selectedDictionary]);
+ const handleInputChange = (e, index, set) => {
+    const currentSet = set === "one" ? inputRefsOne : inputRefsTwo;
 
+    if (e.key === "Backspace" && !e.target.value) {
+      if (index > 0) {
+        const previousInput = currentSet.current[index - 1];
+        previousInput.focus();
+      }
+    } else if (e.target.value.length === 1 && /^[a-zA-Z0-9.]$/.test(e.target.value)) {
+      if (index < currentSet.current.length - 1) {
+        currentSet.current[index + 1].focus();
+      }
+    }
+  };
   // Canonicalize input patterns (convert special chars to wildcards)
   const canonicalizeInput = (inp) => {
     return inp.trim().toLowerCase().replace(/[ *?]/g, ".");
