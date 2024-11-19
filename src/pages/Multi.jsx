@@ -16,7 +16,6 @@ const Multi = () => {
          // const response = await fetch(`assets/dictionaries/${selectedDictionary}.txt`);
         //for gh-pages
         const response = await fetch(`/crosswordsolver-reactjs/assets/dictionaries/${selectedDictionary}.txt`);
-        console.log(response);
         
         if (!response.ok) throw new Error("Failed to load dictionary");
         const text = await response.text();

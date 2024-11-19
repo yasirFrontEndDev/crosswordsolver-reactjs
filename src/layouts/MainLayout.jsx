@@ -1,5 +1,6 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom';
+import Ads from '../components/Ads';
 
 const MainLayout = () => {
   return (
@@ -8,6 +9,7 @@ const MainLayout = () => {
       <div className='inner-pages'>
         <Outlet />
       </div>
+      <Ads />
     </div>
     </>
   )
